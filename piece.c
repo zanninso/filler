@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 02:07:55 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/10/18 03:18:16 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/10/18 16:58:52 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,22 @@ void    free_piece(t_filler *filler)
 
 void fillter_piece(t_filler *filler)
 {
+    int i;
+    int j;
 
+    i = -1;
+    j = 0;
+    while(++i < filler->piece.height)
+        if(!ft_strstr(filler->piece.piece[i], "*"))
+            break;
+    filler->piece.ship_y = i;
+    while(i < filler->piece.height && ft_strstr(filler->piece.piece[i], "*"))
+    {
+        ft_strcpy(filler->piece.piece[j],filler->piece.piece[i]);
+        ft_memset(filler->piece.piece[i], '.', filler->piece.width);
+        i++;
+        j++;
+    }
 }
 
 _Bool get_new_piece(t_filler *filler)
