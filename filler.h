@@ -36,6 +36,8 @@ typedef struct	s_piece
 	char	**piece;
 	int		ship_x;
 	int		ship_y;
+	int		ship_height;
+	int		ship_width;
 	int		width;
 	int		height;
 
