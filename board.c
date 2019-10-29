@@ -75,5 +75,10 @@ _Bool get_new_board(t_filler *filler)
 
 void heat_map(t_filler *filler)
 {
-
+    int y = filler->opponent_position.y;
+    int x = filler->opponent_position.x;
+    while(x < filler->board.width)
+    {
+        
+    }
 }

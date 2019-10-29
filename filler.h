@@ -50,6 +50,7 @@ typedef struct	s_filler
 	char	me;
 	char	opponent;
 	t_point my_position;
+	t_point opponent_position;
 }				t_filler;
 
 void			free_board(t_filler *filler);
