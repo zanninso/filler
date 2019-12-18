@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:13:06 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/10/18 16:57:27 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/18 18:52:55 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct	s_point
 {
 	int x;
 	int y;
+	int value;
 }				t_point;
 
 typedef struct	s_board
