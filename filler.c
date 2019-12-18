@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:13:10 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/10/18 03:23:17 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/11/14 13:16:42 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,21 +45,21 @@ _Bool init(t_filler *filler)
 	return (1);
 }
 
-//  int main()
-//  {
-// 	 t_filler filler;
-// 	 t_point best_position;
+ int main()
+ {
+	 t_filler filler;
+	 t_point best_position;
 
-// 	 init(&filler);
-// 	 while(1)
-// 	 {
-// 		if(!get_new_board(&filler) || !get_new_piece(&filler))
-// 		 	free_all_and_exit(&filler);
-// 		heat_map(&filler);
-// 		best_position = find_best_pos(&filler);
-// 		ft_printf("%d, %d", best_position.x, best_position.y);
-// 	 }
-//  }
+	 init(&filler);
+	 while(1)
+	 {
+		if(!get_new_board(&filler) || !get_new_piece(&filler))
+		 	free_all_and_exit(&filler);
+		heat_map(&filler);
+		best_position = find_best_pos(&filler);
+		//ft_printf("%d, %d", best_position.x, best_position.y);
+	 }
+ }
 
 int main()
 {

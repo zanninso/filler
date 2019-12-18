@@ -6,15 +6,28 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:14:56 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/10/18 03:16:34 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/11/01 23:39:06 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "filler.h"
 
-_Bool can_place_it()
+_Bool can_place_it(t_piece *piece, t_board *board, t_point position)
 {
-    return(1);
+	int x;
+	int y;
+
+	y = 0;
+    while(y < piece->height)
+	{
+		x = 0;
+		while(x < piece->width)
+		{
+			if(board[])
+		}
+		
+	}
+	
 }
 
 t_point find_best_pos(t_filler *filler)
