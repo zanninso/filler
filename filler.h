@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:13:06 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/19 13:36:59 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/19 22:04:27 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct	s_piece
 	int		ship_width;
 	int		width;
 	int		height;
+	
 }				t_piece;
 
 typedef struct	s_filler
@@ -58,6 +59,8 @@ typedef struct	s_filler
 	char	opponent;
 	t_list	*my_edges;
 	t_list *opponent_edges;
+	t_point best_position;
+	int		score;
 }				t_filler;
 
 void			free_board(t_filler *filler);
@@ -65,7 +68,7 @@ _Bool			get_new_board(t_filler *filler);
 void			free_piece(t_filler *filler);
 _Bool			get_new_piece(t_filler *filler);
 void			heat_map(t_filler *filler, t_list *queue);
-t_point			find_best_pos(t_filler *filler);
+void			find_best_pos(t_filler *filler, t_list *queue);
 
 
 #endif

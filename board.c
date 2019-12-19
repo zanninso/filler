@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 01:37:28 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/19 13:03:39 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/19 22:36:09 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,43 @@ _Bool allocat_board(t_filler *filler)
 	return (1);
 }
 
+int is_edge()
+{
+
+}
+
+void get_edges(t_filler *filler)
+{
+    int y;
+    int x;
+    t_board_place place;
+    t_list *new;
+    int is_edg;
+
+    y = 0;
+    x = 0;
+    while (y < filler->board.height)
+	{
+		x = 0;
+		while (x < filler->board.width)
+		{
+            place = (t_board_place){x, y, filler->board.board[y][x]};
+            is_edg = is_edge(filler->board.board[y][x]);
+			if(is_edg == 1)
+            {
+                new = ft_lstnew(&place, sizeof(t_board_place));
+                ft_lstadd(filler->my_edges, new);
+            }
+            else if(is_edg == 2)
+            {
+                new = ft_lstnew(&place, sizeof(t_board_place));
+                ft_lstadd(filler->opponent_edges, new);
+            }
+		}
+		y++;
+	}
+}
+
 _Bool update_board(t_filler *filler)
 {
     char *line;
@@ -47,7 +84,7 @@ _Bool update_board(t_filler *filler)
     {
         if(!(tmp =ft_strchr(line, ' ')))
             break;
-        tmp = ft_translate(tmp + 1, ".", "\200");
+        tmp = ft_translate(tmp + 1, ".", "\255");
         ft_strcpy(filler->board.board[i], line);
         ft_strdel(&line);
         i++;
