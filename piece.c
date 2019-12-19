@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 02:07:55 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/10/18 16:58:52 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/19 12:47:50 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,14 @@ _Bool allocat_peice(t_filler *filler)
 
     if (filler->piece.height == 0 || filler->piece.width == 0)
         return (0);
-    if (!(piece = (char **)malloc(sizeof(char *) * filler->piece.height)))
+    if (!(piece = (char **)ft_memalloc(sizeof(char *) * filler->piece.height)))
         return (0);
     i = 0;
     while (i < filler->piece.height)
     {
-        if (!(piece[i] = (char *)ft_memalloc(sizeof(char) * filler->piece.width)))
+        if (!(piece[i] = (char *)ft_memalloc(filler->piece.width)))
         {
-            while (i--)
-                free(piece[i]);
-            free(piece);
+            ft_free_2d_tab(piece);
             return (0);
         }
         i++;
@@ -52,27 +50,27 @@ void free_piece(t_filler *filler)
     free(filler->piece.piece);
 }
 
-void fillter_piece(t_filler *f)
+void analyse_piece(t_piece *p)
 {
     int i;
     int j;
+    int max;
 
     i = -1;
     j = 0;
-    while (++i < f->piece.height)
-        if (!ft_strstr(f->piece.piece[i], "*"))
+    while (++i < p->height)
+        if (ft_strchr(p->piece[i], '*'))
             break;
-    f->piece.ship_y = i;
-    while (i < f->piece.height && ft_strstr(f->piece.piece[i], "*"))
+    p->ship_y = i;
+    while (i < p->height && ft_strchr(p->piece[i], '*'))
     {
-        ft_strcpy(f->piece.piece[j], f->piece.piece[i]);
-        ft_memset(f->piece.piece[i], '.', f->piece.width);
-        f->piece.ship_x = ft_max(ft_strindexof(f->piece.piece[i], '*'), f->piece.ship_x);
-        f->piece.ship_width = ft_max(ft_str_occurence(f->piece.piece[i], '*'), f->piece.ship_width);
+        p->ship_x = ft_min(ft_strindexof(p->piece[i], '*'), p->ship_x);
+        max = ft_max(ft_strrchr(p->piece[i], '*') - p->piece[i], max);
         i++;
         j++;
     }
-     f->piece.ship_height = j;
+     p->ship_height = j;
+     p->ship_width = max - p->ship_x;
 }
 
 _Bool get_new_piece(t_filler *filler)
@@ -99,6 +97,6 @@ _Bool get_new_piece(t_filler *filler)
         i++;
     }
     if (i == filler->piece.height)
-        fillter_piece(filler);
+        analyse_piece(filler);
     return (i == filler->piece.height);
 }

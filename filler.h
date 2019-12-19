@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   filler.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:13:06 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/19 01:46:28 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/19 13:36:59 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,13 @@ typedef struct	s_board
 	int		height;
 }				t_board;
 
+typedef struct	s_board_place
+{
+	int x;
+	int y;
+	int value;
+}				t_board_place;
+
 typedef struct	s_piece
 {
 	char	**piece;
@@ -49,8 +56,8 @@ typedef struct	s_filler
 	t_piece piece;
 	char	me;
 	char	opponent;
-	t_list	*my_edge;
-	t_list *opponent_edge;
+	t_list	*my_edges;
+	t_list *opponent_edges;
 }				t_filler;
 
 void			free_board(t_filler *filler);
