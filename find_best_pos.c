@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_best_pos.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:14:56 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/11/01 23:39:06 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/19 01:42:44 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,5 @@ t_point find_best_pos(t_filler *filler)
 	t_point best_p;
 
 	ft_bzero(&best_p, sizeof(t_point));
-	while()
-	{
-		while()
-		{
-
-		}
-	}
 	return (best_p);
 }

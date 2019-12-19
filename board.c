@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   board.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 01:37:28 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/10/18 03:18:28 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/19 01:33:50 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void    free_board(t_filler *filler)
 _Bool get_new_board(t_filler *filler)
 {
     char *line;
+    char *tmp;
     int i;
 
     i = 0;
@@ -65,20 +66,13 @@ _Bool get_new_board(t_filler *filler)
     ft_strdel(&line);
     while(i < filler->board.height && get_next_line(0, &line) > 0)
     {
+        if(!(tmp =ft_strchr(line, ' ')))
+            break;
+        tmp = ft_translate(tmp + 1, ".", "\200");
         ft_strcpy(filler->board.board[i], line);
         ft_strdel(&line);
         i++;
     }
     ft_strdel(&line);
     return(i != filler->board.height);
-}
-
-void heat_map(t_filler *filler)
-{
-    int y = filler->opponent_position.y;
-    int x = filler->opponent_position.x;
-    while(x < filler->board.width)
-    {
-        
-    }
 }

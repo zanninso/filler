@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   filler.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:13:10 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/18 22:36:36 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/19 01:42:42 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ void heat_map(t_filler *filler, t_list *queue)
 				if (filler->board.board[t->y + y][t->x + x] >= t->value)
 				{
 					filler->board.board[t->y + y][t->x + x] = t->value + 1;
-					new = (t_point){t->x + x, t->y + y, t->value + 1}
-					ft_lstenqueue(queue,ft_lstnew(&new, sizeof(t_point)));
+					new = (t_point){t->x + x, t->y + y, t->value + 1};
+					ft_lstenqueue(queue, ft_lstnew(&new, sizeof(t_point)));
 				}
 			y++;
 		}
-		ft_lstdequeue(&filler->queue);
+		ft_lstdequeue(&queue,ft_memdel);
 	}
 }
 
@@ -75,6 +75,7 @@ _Bool init(t_filler *filler)
 int main()
 {
 	t_filler filler;
+	t_list *queue;
 	t_point best_position;
 
 	init(&filler);
@@ -82,14 +83,14 @@ int main()
 	{
 		if (!get_new_board(&filler) || !get_new_piece(&filler))
 			free_all_and_exit(&filler);
-		heat_map(&filler);
+		heat_map(&filler, queue);
 		best_position = find_best_pos(&filler);
 		//ft_printf("%d, %d", best_position.x, best_position.y);
 	}
 }
 
-int main()
-{
+// int main()
+// {
 	// char *line = "$$$ exec p1 : [../aait-ihi]";
 	// int fd;
 
@@ -98,11 +99,11 @@ int main()
 	// fd = fd == -1 ? 2 : fd;
 	// while(get_next_line(0, &line))
 	// 	ft_putendl_fd(line, fd);
-	char *line;
+// 	char *line;
 
-	while (get_next_line(0, &line))
-	{
-		ft_putendl_fd(line, 2);
-	}
-	return (0);
-}
+// 	while (get_next_line(0, &line))
+// 	{
+// 		ft_putendl_fd(line, 2);
+// 	}
+// 	return (0);
+// }

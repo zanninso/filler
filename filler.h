@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   filler.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:13:06 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/18 18:52:55 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/19 01:46:28 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ typedef struct	s_piece
 	int		ship_width;
 	int		width;
 	int		height;
-
 }				t_piece;
 
 typedef struct	s_filler
@@ -50,15 +49,15 @@ typedef struct	s_filler
 	t_piece piece;
 	char	me;
 	char	opponent;
-	t_point my_position;
-	t_point opponent_position;
+	t_list	*my_edge;
+	t_list *opponent_edge;
 }				t_filler;
 
 void			free_board(t_filler *filler);
 _Bool			get_new_board(t_filler *filler);
 void			free_piece(t_filler *filler);
 _Bool			get_new_piece(t_filler *filler);
-void			heat_map(t_filler *filler);
+void			heat_map(t_filler *filler, t_list *queue);
 t_point			find_best_pos(t_filler *filler);
 
 
