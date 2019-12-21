@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 02:07:55 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/19 12:47:50 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/20 23:21:12 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void analyse_piece(t_piece *p)
         j++;
     }
      p->ship_height = j;
-     p->ship_width = max - p->ship_x;
+     p->ship_width = max - p->ship_x + 1;
 }
 
 _Bool get_new_piece(t_filler *filler)
@@ -82,10 +82,11 @@ _Bool get_new_piece(t_filler *filler)
     free_piece(filler);
     line = NULL;
     i = 0;
-    if (get_next_line(0, &line) > 0 && (tmp = ft_strstr(line, "Piece ")))
+    if (get_next_line(0, &line) > 0 && (tmp = ft_strchr(line, ' ')))
     {
         filler->piece.height = ft_atoi(tmp);
-        filler->piece.width = ft_atoi(strstr(tmp, " "));
+        filler->piece.width = ft_atoi(ft_strchr(tmp + 1, ' '));
+        ft_putendl_fd(line, filler->output_fd);
         ft_strdel(&line);
     }
     if (!allocat_peice(filler))
@@ -93,10 +94,11 @@ _Bool get_new_piece(t_filler *filler)
     while (i < filler->piece.height && get_next_line(0, &line) > 0)
     {
         ft_strcpy(filler->piece.piece[i], line);
+        ft_putendl_fd(line, filler->output_fd);
         ft_strdel(&line);
         i++;
     }
     if (i == filler->piece.height)
-        analyse_piece(filler);
+        analyse_piece(&filler->piece);
     return (i == filler->piece.height);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   filler.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:13:10 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/19 01:42:42 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/21 01:20:48 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,22 @@ void heat_map(t_filler *filler, t_list *queue)
 	while (queue)
 	{
 		t = (t_point *)queue->content;
-		y = -1 * t->y > 0;
+		y = -1 * (t->y > 0);
 		while (y < 2 && t->y + y < filler->board.height)
 		{
-			x = (-1 * t->x > 0) - 1;
+			x = (-1 * (t->x > 0)) - 1;
 			while (++x < 2 && t->x + x < filler->board.width)
-				if (filler->board.board[t->y + y][t->x + x] >= t->value)
-				{
-					filler->board.board[t->y + y][t->x + x] = t->value + 1;
-					new = (t_point){t->x + x, t->y + y, t->value + 1};
-					ft_lstenqueue(queue, ft_lstnew(&new, sizeof(t_point)));
-				}
+				if (filler->board.board[t->y + y][t->x + x] < 0)
+					if (filler->board.board[t->y + y][t->x + x] > t->value + 1)
+					{
+						filler->board.board[t->y + y][t->x + x] = t->value + 1;
+						new = (t_point){t->x + x, t->y + y, t->value + 1};
+						ft_lstenqueue(&queue, ft_lstnew(&new, sizeof(t_point)));
+					}
 			y++;
 		}
-		ft_lstdequeue(&queue,ft_memdel);
+		ft_lstdequeue(&queue, ft_memdel);
+		ft_printf("\n");
 	}
 }
 
@@ -50,21 +52,23 @@ _Bool init(t_filler *filler)
 {
 	char *line;
 	char *tmp;
-	int i;
 
 	ft_bzero(filler, sizeof(t_filler));
+	filler->output_fd = 2;
 	line = NULL;
 	if (get_next_line(0, &line))
 	{
-		filler->me = (ft_strstr(line, "p1") ? 'x' : 'o');
-		filler->opponent = (filler->me == 'o' ? 'x' : 'o');
+		filler->me = (ft_strstr(line, "p1") ? 'O' : 'X');
+		filler->opponent = (filler->me == 'O' ? 'X' : 'O');
+		ft_putendl_fd(line, filler->output_fd);
 		ft_strdel(&line);
 	}
 	if (get_next_line(0, &line))
 	{
-		tmp = ft_strstr(line, "Plateau ");
+		tmp = ft_strchr(line, ' ');
 		filler->board.height = ft_atoi(tmp);
-		filler->board.width = ft_atoi(ft_strstr(tmp, " "));
+		filler->board.width = ft_atoi(ft_strchr(tmp + 1, ' '));
+		ft_putendl_fd(line, filler->output_fd);
 		ft_strdel(&line);
 	}
 	if (!get_new_board(filler) || !get_new_piece(filler))
@@ -72,35 +76,56 @@ _Bool init(t_filler *filler)
 	return (1);
 }
 
+// int main()
+// {
+// 	t_filler filler;
+
+// 	init(&filler);
+// 	while (1)
+// 	{
+// 		filler.score = INT32_MAX;
+// 		filler.best_position = (t_point){0, 0, 0};
+// 		heat_map(&filler, filler.opponent_edges);
+// 		find_best_pos(&filler, filler.my_edges);
+// 		ft_printf("%d %d\n", filler.best_position.x - filler.piece.ship_x,
+// 								filler.best_position.y - filler.piece.ship_y);
+// 		filler.opponent_edges = NULL;
+// 		filler.my_edges = NULL;
+// 		if (!update_board(&filler) || !get_new_piece(&filler))
+// 			free_all_and_exit(&filler);
+// 	}
+// }
+
 int main()
 {
 	t_filler filler;
-	t_list *queue;
-	t_point best_position;
+	const int fd = open("output2", O_RDONLY);
 
+	dup2(fd, 0);
 	init(&filler);
 	while (1)
 	{
-		if (!get_new_board(&filler) || !get_new_piece(&filler))
+		filler.score = INT32_MAX;
+		
+		filler.best_position = (t_point){0, 0, 0};
+		heat_map(&filler, filler.opponent_edges);
+		print_map(1, &filler.board);
+		//print_ship(1, &filler.piece);
+		find_best_pos(&filler, filler.my_edges);
+		ft_printf("%d %d\n", filler.piece.ship_x - filler.best_position.x,
+								filler.piece.ship_y - filler.best_position.y);
+		filler.opponent_edges = NULL;
+		filler.my_edges = NULL;
+		if (!update_board(&filler) || !get_new_piece(&filler))
 			free_all_and_exit(&filler);
-		heat_map(&filler, queue);
-		best_position = find_best_pos(&filler);
-		//ft_printf("%d, %d", best_position.x, best_position.y);
 	}
 }
 
 // int main()
 // {
-	// char *line = "$$$ exec p1 : [../aait-ihi]";
-	// int fd;
-
-	// line = NULL;
-	// fd = open("output", O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
-	// fd = fd == -1 ? 2 : fd;
-	// while(get_next_line(0, &line))
-	// 	ft_putendl_fd(line, fd);
 // 	char *line;
 
+// 	line = NULL;
 // 	while (get_next_line(0, &line))
 // 	{
 // 		ft_putendl_fd(line, 2);
