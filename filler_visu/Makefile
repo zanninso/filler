@@ -6,40 +6,44 @@
 #    By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/20 14:24:44 by aait-ihi          #+#    #+#              #
-#    Updated: 2019/12/22 23:37:34 by aait-ihi         ###   ########.fr        #
+#    Updated: 2019/12/22 00:54:36 by aait-ihi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-
-NAME = aait-ihi.filler
-
-CFLAGS = -Wall -Werror -Wextra -g
+NAME = filler_visu
 
 CC = gcc
 
-SRCS = filler.c board.c piece.c debug.c find_best_pos.c
+CFLAGS = -Wall -Wextra -Werror -g
 
-LIBFT = libft/libft.a
+SRC =	draw.c events.c main.c read_map.c
 
-OBJ = $(SRCS:.c=.o)
+LIB_FT = libft/libft.a
+
+MLX_PATH = /usr/local/
+
+OBJ = $(SRC:%c=%o)
 
 all : $(NAME)
 
-$(NAME) : $(OBJ) $(LIBFT)
-	$(CC) -g $(CFLAGS) $(OBJ) $(LIBFT) libft/list/ft_lstenqueue.c -o $(NAME)
 
-$(LIBFT) : libf
+$(LIB_FT) : lib
 
-libf :
+lib:
 	make -C libft
-$(OBJ) : filler.h
 
-clean:
-	#make clean -C libft
-	rm -f $(OBJ)
+$(NAME) :$(LIB_FT) $(OBJ)  filler_visu.h
+	$(CC) -o $(NAME) $(CFLAGS) $(OBJ) $(LIB_FT) -lmlx  -L  $(MLX_PATH)lib/ -I $(MLX_PATH)include -framework OpenGL -framework AppKit
 
-fclean: clean
-	#make fclean -C libft
-	rm -f $(NAME)
+%.o : %.c filler_visu.h
+	$(CC) $(CFLAGS) -I . -o $@ -c $<
 
-re: fclean all
+clean :
+	make clean -C libft
+	/bin/rm -rf $(OBJ)
+
+fclean : clean
+	make fclean -C libft
+	/bin/rm -rf $(NAME)
+
+re : fclean all

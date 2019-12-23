@@ -3,37 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   board.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 01:37:28 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/21 00:58:49 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/23 01:43:13 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "filler.h"
-
-_Bool allocat_board(t_filler *filler)
-{
-    int i;
-    char **board;
-
-    if (filler->board.height == 0 || filler->board.width == 0)
-        return (0);
-    if (!(board = (char **)ft_memalloc(sizeof(char *) * filler->board.height)))
-        return (0);
-    i = 0;
-    while (i < filler->board.height)
-    {
-        if (!(board[i] = (char *)ft_memalloc(filler->board.width)))
-        {
-            ft_free_2d_tab(board);
-            return (0);
-        }
-        i++;
-    }
-    filler->board.board = board;
-    return (1);
-}
 
 int is_edge(int x, int y, t_board *board, char c)
 {
@@ -98,7 +75,7 @@ void skip_lines(t_filler *filler)
     while (get_next_line(0, &line))
     {
         ft_putendl_fd(line, filler->output_fd);
-        if(ft_strstr(line,"0123456"))
+        if (ft_strstr(line, "0123456"))
         {
             ft_strdel(&line);
             break;
@@ -119,21 +96,24 @@ _Bool update_board(t_filler *filler)
     while (i < filler->board.height && get_next_line(0, &line) > 0)
     {
         ft_putendl_fd(line, filler->output_fd);
-        if (!(tmp = ft_strchr(line, ' ')))
+        if (!(tmp = ft_strchr(line, ' ')) || (int)ft_strlen(tmp + 1) != filler->board.width)
             break;
         tmp = ft_translate(tmp + 1, ".", "\xff");
-        ft_strcpy(filler->board.board[i], tmp);
+        ft_memcpy(filler->board.board[i], tmp, filler->board.width);
         ft_strdel(&line);
         i++;
     }
-    // ft_strdel(&line);
+    ft_strdel(&line);
     get_edges(filler);
     return (i == filler->board.height);
 }
 
 _Bool get_new_board(t_filler *filler)
 {
-    if (!allocat_board(filler))
+    t_board *bord;
+    bord = &filler->board;
+    bord->board = (char**)ft_malloc2d(bord->height, bord->width + 1, ft_memalloc);
+    if (!bord->board)
         return (0);
     return (update_board(filler));
 }

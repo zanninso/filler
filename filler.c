@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   filler.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:13:10 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/21 01:20:48 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/21 17:44:32 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void heat_map(t_filler *filler, t_list *queue)
 			y++;
 		}
 		ft_lstdequeue(&queue, ft_memdel);
-		ft_printf("\n");
 	}
 }
 
@@ -76,16 +75,41 @@ _Bool init(t_filler *filler)
 	return (1);
 }
 
+int main()
+{
+	t_filler filler;
+
+	init(&filler);
+	while (1)
+	{
+		filler.score = INT32_MAX;
+		filler.best_position = (t_point){0, 0, 0};
+		heat_map(&filler, filler.opponent_edges);
+		find_best_pos(&filler, filler.my_edges);
+		ft_printf("%d %d\n", filler.best_position.y - filler.piece.ship_y,filler.best_position.x - filler.piece.ship_x);
+		filler.opponent_edges = NULL;
+		filler.my_edges = NULL;
+		free_piece(&filler);
+		if (!update_board(&filler) || !get_new_piece(&filler))
+			free_all_and_exit(&filler);
+	}
+}
+
 // int main()
 // {
 // 	t_filler filler;
+// 	const int fd = open("output3", O_RDONLY);
 
+// 	dup2(fd, 0);
 // 	init(&filler);
 // 	while (1)
 // 	{
 // 		filler.score = INT32_MAX;
+		
 // 		filler.best_position = (t_point){0, 0, 0};
 // 		heat_map(&filler, filler.opponent_edges);
+// 		print_map(1, &filler.board);
+// 		//print_ship(1, &filler.piece);
 // 		find_best_pos(&filler, filler.my_edges);
 // 		ft_printf("%d %d\n", filler.best_position.x - filler.piece.ship_x,
 // 								filler.best_position.y - filler.piece.ship_y);
@@ -95,31 +119,6 @@ _Bool init(t_filler *filler)
 // 			free_all_and_exit(&filler);
 // 	}
 // }
-
-int main()
-{
-	t_filler filler;
-	const int fd = open("output2", O_RDONLY);
-
-	dup2(fd, 0);
-	init(&filler);
-	while (1)
-	{
-		filler.score = INT32_MAX;
-		
-		filler.best_position = (t_point){0, 0, 0};
-		heat_map(&filler, filler.opponent_edges);
-		print_map(1, &filler.board);
-		//print_ship(1, &filler.piece);
-		find_best_pos(&filler, filler.my_edges);
-		ft_printf("%d %d\n", filler.piece.ship_x - filler.best_position.x,
-								filler.piece.ship_y - filler.best_position.y);
-		filler.opponent_edges = NULL;
-		filler.my_edges = NULL;
-		if (!update_board(&filler) || !get_new_piece(&filler))
-			free_all_and_exit(&filler);
-	}
-}
 
 // int main()
 // {

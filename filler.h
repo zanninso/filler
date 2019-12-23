@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   filler.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:13:06 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/20 23:12:12 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/21 14:18:24 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 # define FILLER_H
 # include "libft/includes/libft.h"
-# include <fcntl.h>
 # include <sys/types.h>
 # include <sys/stat.h>
+# include <fcntl.h>
 
 typedef struct	s_point
 {

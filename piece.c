@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   piece.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 02:07:55 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/20 23:21:12 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/23 01:49:20 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ _Bool allocat_peice(t_filler *filler)
     i = 0;
     while (i < filler->piece.height)
     {
-        if (!(piece[i] = (char *)ft_memalloc(filler->piece.width)))
+        if (!(piece[i] = (char *)ft_strnew(filler->piece.width)))
         {
             ft_free_2d_tab(piece);
             return (0);
@@ -45,16 +45,15 @@ void free_piece(t_filler *filler)
         free(filler->piece.piece[i]);
         i++;
     }
-    filler->piece.height = 0;
-    filler->piece.width = 0;
     free(filler->piece.piece);
+    ft_bzero(&filler->piece, sizeof(t_piece));
 }
 
 void analyse_piece(t_piece *p)
 {
     int i;
     int j;
-    int max;
+    int max = 0;
 
     i = -1;
     j = 0;
@@ -70,7 +69,7 @@ void analyse_piece(t_piece *p)
         j++;
     }
      p->ship_height = j;
-     p->ship_width = max - p->ship_x + 1;
+     p->ship_width = (max - p->ship_x) + 1;
 }
 
 _Bool get_new_piece(t_filler *filler)
@@ -93,7 +92,7 @@ _Bool get_new_piece(t_filler *filler)
         return (0);
     while (i < filler->piece.height && get_next_line(0, &line) > 0)
     {
-        ft_strcpy(filler->piece.piece[i], line);
+        ft_strncpy(filler->piece.piece[i], line, filler->piece.width);
         ft_putendl_fd(line, filler->output_fd);
         ft_strdel(&line);
         i++;
