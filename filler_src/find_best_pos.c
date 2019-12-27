@@ -3,21 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   find_best_pos.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aait-ihi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:14:56 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/23 01:55:32 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/24 01:21:11 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "filler.h"
 
-_Bool can_place_it(t_piece *piece, t_board *board, t_point position)
+_Bool	can_place_it(t_piece *piece, t_board *board, t_point position)
 {
-	int x;
-	int y;
-	int contact;
-	const int width = piece->ship_width;
+	int	x;
+	int	y;
+	int	contact;
 
 	if (position.x + piece->ship_width > board->width)
 		return (0);
@@ -29,7 +28,7 @@ _Bool can_place_it(t_piece *piece, t_board *board, t_point position)
 	{
 		x = 0;
 		x = 0;
-		while (x < width)
+		while (x < piece->ship_width)
 		{
 			if (piece->piece[piece->ship_y + y][piece->ship_x + x] == '*')
 				contact += (board->board[position.y + y][position.x + x] > 0);
@@ -40,55 +39,48 @@ _Bool can_place_it(t_piece *piece, t_board *board, t_point position)
 	return (contact == 1);
 }
 
-int get_score(t_piece *piece, t_board *board, t_point p)
+int		get_score(t_piece *piece, t_board *board, t_point p)
 {
-	int x;
-	int y;
-	int score;
-	int edg;
+	int		x;
+	int		y;
+	double	score;
 
-	
-	edg = INT32_MAX;
 	score = INT32_MAX;
 	y = 0;
 	while (y < piece->ship_height)
 	{
-		x = 0;
-		while (x < piece->ship_width)
+		x = -1;
+		while (++x < piece->ship_width)
 		{
 			if (piece->piece[piece->ship_y + y][piece->ship_x + x] == '*')
-			{
 				score = ft_min(board->board[p.y + y][p.x + x], score);
-				edg = ft_min((board->width - p.x + x) % board->width, edg);
-			}
-			x++;
 		}
 		y++;
 	}
-	//edg = 0; 
-	return (score + edg / 1);
+	return (score);
 }
 
-void update_score(t_filler *filler, t_piece *piece, t_board *board, t_point p)
+void	update_score(t_filler *filler, t_piece *piece,
+													t_board *board, t_point p)
 {
-	int score;
+	int	score;
 
 	if (!can_place_it(piece, board, p))
-		return;
+		return ;
 	score = get_score(piece, board, p);
 	if (score < filler->score)
 	{
 		filler->best_position = p;
-		filler->score = score ;
+		filler->score = score;
 	}
 }
 
-void find_best_pos(t_filler *filler, t_list *queue)
+void	find_best_pos(t_filler *filler, t_piece *piece,
+												t_board *board, t_list *queue)
 {
-	const t_board *board = &filler->board;
-	t_point point;
-	int x;
-	int y;
+	t_point	point;
+	int		x;
+	int		y;
 
 	while (queue)
 	{
@@ -97,13 +89,16 @@ void find_best_pos(t_filler *filler, t_list *queue)
 		{
 			x = -1;
 			while (++x < filler->piece.ship_width)
-				if (filler->piece.piece[filler->piece.ship_y + y][filler->piece.ship_x + x] == '*')
+			{
+				if (piece->piece[piece->ship_y + y][piece->ship_x + x] == '*')
 				{
 					point.x = ((t_board_place *)queue->content)->x - x;
 					point.y = ((t_board_place *)queue->content)->y - y;
-					if (BETWEEN(point.x, 0, board->width) && BETWEEN(point.y, 0, board->height))
-						update_score(filler, &filler->piece, &filler->board, point);
+					if (BETWEEN(point.x, 0, board->width))
+						if (BETWEEN(point.y, 0, board->height))
+							update_score(filler, piece, board, point);
 				}
+			}
 		}
 		ft_lstdequeue(&queue, ft_memdel);
 	}
