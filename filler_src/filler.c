@@ -6,18 +6,18 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 14:13:10 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/24 01:21:52 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/29 00:04:07 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "filler.h"
 
-void	heat_map(t_filler *filler, t_list *queue)
+void heat_map(t_filler *filler, t_list *queue)
 {
-	int		x;
-	int		y;
-	t_point	*t;
-	t_point	new;
+	int x;
+	int y;
+	t_point *t;
+	t_point new;
 
 	while (queue)
 	{
@@ -40,10 +40,10 @@ void	heat_map(t_filler *filler, t_list *queue)
 	}
 }
 
-_Bool	init(t_filler *filler)
+_Bool init(t_filler *filler)
 {
-	char	*line;
-	char	*tmp;
+	char *line;
+	char *tmp;
 
 	ft_bzero(filler, sizeof(t_filler));
 	filler->output_fd = open("input", O_WRONLY | O_CREAT, 0666);
@@ -53,41 +53,51 @@ _Bool	init(t_filler *filler)
 		filler->me = (ft_strstr(line, "p1") ? 'O' : 'X');
 		filler->opponent = (filler->me == 'O' ? 'X' : 'O');
 		ft_putendl_fd(line, filler->output_fd);
-		ft_strdel(&line);
 	}
+	ft_strdel(&line);
 	if (get_next_line(0, &line))
 	{
-		tmp = ft_strchr(line, ' ');
-		filler->board.height = ft_atoi(tmp);
-		filler->board.width = ft_atoi(ft_strchr(tmp + 1, ' '));
+		if ((tmp = ft_strchr(line, ' ')))
+		{
+			filler->board.height = ft_atoi(tmp);
+			filler->board.width = ft_atoi(ft_strchr(tmp + 1, ' '));
+		}
 		ft_putendl_fd(line, filler->output_fd);
-		ft_strdel(&line);
 	}
+	ft_strdel(&line);
 	if (!get_new_board(filler) || !get_new_piece(filler))
 		return (0);
 	return (1);
 }
 
-int		main(void)
+int main(void)
 {
-	t_filler	filler;
+	t_filler filler;
+	int fd  = open("input",O_RDONLY);
 
-	if (!init(&filler))
-		free_all_and_exit(&filler);
-	analyse_piece(&filler.piece);
-	while (1)
+	dup2(fd, 0);
+	if (init(&filler))
 	{
-		filler.score = INT32_MAX;
-		filler.best_position = (t_point){0, 0, 0};
-		heat_map(&filler, filler.opponent_edges);
-		find_best_pos(&filler, &filler.piece, &filler.board, filler.my_edges);
-		ft_printf("%d ", filler.best_position.y - filler.piece.ship_y);
-		ft_printf("%d\n", filler.best_position.x - filler.piece.ship_x);
-		filler.opponent_edges = NULL;
-		filler.my_edges = NULL;
-		free_piece(&filler.piece);
-		if (!update_board(&filler) || !get_new_piece(&filler))
-			free_all_and_exit(&filler);
 		analyse_piece(&filler.piece);
+		while (1)
+		{
+			filler.score = INT32_MAX;
+			filler.best_position = (t_point){0, 0, 0};
+			heat_map(&filler, filler.opponent_edges);
+			best_pos(&filler, &filler.piece, &filler.board, filler.my_edges);
+			ft_printf("%d ", filler.best_position.y - filler.piece.ship_y);
+			ft_printf("%d\n", filler.best_position.x - filler.piece.ship_x);
+			filler.opponent_edges = NULL;
+			filler.my_edges = NULL;
+			free_piece(&filler.piece);
+			if (!update_board(&filler) || !get_new_piece(&filler))
+			{
+				free_all_and_exit(&filler);
+				exit(0);
+			}
+			analyse_piece(&filler.piece);
+		}
 	}
+	exit(0);
+	free_all_and_exit(&filler);
 }

@@ -6,7 +6,7 @@
 /*   By: aait-ihi <aait-ihi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 03:14:56 by aait-ihi          #+#    #+#             */
-/*   Updated: 2019/12/24 01:21:11 by aait-ihi         ###   ########.fr       */
+/*   Updated: 2019/12/28 17:19:41 by aait-ihi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	update_score(t_filler *filler, t_piece *piece,
 	}
 }
 
-void	find_best_pos(t_filler *filler, t_piece *piece,
+void	best_pos(t_filler *filler, t_piece *piece,
 												t_board *board, t_list *queue)
 {
 	t_point	point;
